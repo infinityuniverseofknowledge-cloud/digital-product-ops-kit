@@ -6,9 +6,8 @@ A lightweight, review-first system for cataloging static HTML projects and prepa
 
 - inventories HTML files, titles, sizes, forms and third-party scripts
 - flags simple release-review risks such as credential-like strings
-- writes JSON, CSV and Markdown catalogs
-- produces a human review gate
-- prepares conservative product-listing drafts from verified metadata
+- writes CSV review artifacts through `audit_html_batch.sh`
+- supports a review-first content-factory workflow
 
 ## What it deliberately does not do
 
@@ -18,23 +17,28 @@ A lightweight, review-first system for cataloging static HTML projects and prepa
 
 Publishing, pricing and external submissions require human review and explicit approval.
 
-## Run
+## HTML audit
 
 ```bash
-python3 pipeline.py catalog /path/to/html-projects --out output/catalog
-python3 pipeline.py gate output/catalog/catalog.json --out output/release-gate.md
-python3 pipeline.py draft output/catalog/catalog.json --project Example.html --out output/listing-draft.md
+sh audit_html_batch.sh path/to/projects output
 ```
 
-## Recommended workflow
+The audit produces a catalog and release queue. It detects only basic static indicators. Manually test every project before public claims or sale.
+
+## Current verified run
+
+- 238 HTML files inventoried in the Hackathon Projects Collection
+- 52 projects marked for human review by basic static checks
+- AetherGrid Colossus was cataloged: 44,055 bytes, no form, no remote script found by this static scan, no credential-like marker found by this static scan
+- 3,000 English editorial briefs generated locally as planning data; they are not finished books or audiobooks, and none were published
+
+## Release workflow
 
 1. Catalog a small batch.
-2. Open and manually test every project proposed for release.
+2. Test every proposed product manually.
 3. Resolve or disclose every gate warning.
 4. Add genuine screenshots, exact deliverables, licence and support terms.
-5. Review the English listing and market-based price.
-6. Publish one product only after an explicit approval.
-
-## Limits
-
-Static analysis is not a security certification. A project may still behave differently at runtime, so manual browser testing remains mandatory before public claims or sale.
+5. Expand selected briefs with original writing, fact review and rights review.
+6. Record audio only through an approved licensed voice workflow.
+7. Review the English listing and price.
+8. Publish one product after an explicit approval.
