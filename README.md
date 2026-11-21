@@ -1,44 +1,33 @@
 # Digital Product Ops Kit
 
-A lightweight, review-first system for cataloging static HTML projects and preparing accurate English digital-product listing drafts.
+A lightweight, review-first toolkit for inventorying local static HTML projects and preparing truthful digital product listings. It does not publish, sell, send outreach, or make AI, security, or earnings claims.
 
-## What it does
+## Offline HTML inventory
 
-- inventories HTML files, titles, sizes, forms and third-party scripts
-- flags simple release-review risks such as credential-like strings
-- writes CSV review artifacts through `audit_html_batch.sh`
-- supports a review-first content-factory workflow
+Requirements: Python 3.8+ and a POSIX shell (including Termux). No third-party packages or paid services. The scanner reads HTML as data and does not run its scripts or make network requests.
 
-## What it deliberately does not do
-
-- publish products, change prices, submit applications or send outreach
-- handle passwords, API keys, payment data, wallets or private data
-- fabricate testimonials, earnings, licences, security claims or AI capabilities
-
-Publishing, pricing and external submissions require human review and explicit approval.
-
-## HTML audit
-
-```bash
-sh audit_html_batch.sh path/to/projects output
+```sh
+sh audit_html_batch.sh /path/to/projects /path/to/new-output
+# or
+python3 audit_html_batch.py /path/to/projects /path/to/new-output
 ```
 
-The audit produces a catalog and release queue. It detects only basic static indicators. Manually test every project before public claims or sale.
+The output directory must be outside the source tree. `catalog.csv` and `release-gate.md` must not already exist; previous work is never intentionally overwritten. The scanner reads `.html` files up to 5 MiB each, skips and counts symlinks, fails on unreadable or oversized inputs, and does not silently report partial results as complete. Output may still contain filenames and titles; treat it as potentially sensitive and review it before sharing. Spreadsheet-formula-like path and title cells receive a leading apostrophe, so these cells do not preserve the literal original value.
 
-## Current verified run
+The catalog lists file size, parsed title, form presence, static HTTP(S) or protocol-relative script `src` count, and a simple credential-like text marker. The queue flags files needing human review. A marker is not proof a secret exists, and absence of a marker is not proof it doesn't. Titles containing known marker words are redacted; other sensitive text could still appear in titles or paths.
 
-- 238 HTML files inventoried in the Hackathon Projects Collection
-- 52 projects marked for human review by basic static checks
-- AetherGrid Colossus was cataloged: 44,055 bytes, no form, no remote script found by this static scan, no credential-like marker found by this static scan
-- 3,000 English editorial briefs generated locally as planning data; they are not finished books or audiobooks, and none were published
+**Limitations:** This is not a security audit or a release approval. Detection is heuristic: it does not execute JavaScript or discover dynamic imports, other resource types, CSS URLs, obfuscated credentials, malformed or unusual encodings, privacy violations, rights issues, or product functionality. HTML is decoded as UTF-8 with replacement. Scanning assumes a trusted local filesystem without concurrent malicious modification. Manually test every proposed product and verify rights, exact deliverables, claims and support terms before distribution. License is not specified in this repository.
 
-## Release workflow
+## Tests
 
-1. Catalog a small batch.
-2. Test every proposed product manually.
-3. Resolve or disclose every gate warning.
-4. Add genuine screenshots, exact deliverables, licence and support terms.
-5. Expand selected briefs with original writing, fact review and rights review.
-6. Record audio only through an approved licensed voice workflow.
-7. Review the English listing and price.
-8. Publish one product after an explicit approval.
+```sh
+python3 -m unittest -v test_audit_html_batch
+```
+
+## Review-first workflow
+
+1. Inventory a small batch locally.
+2. Manually test each proposed product and resolve or disclose review warnings.
+3. Verify authorship, third-party licenses, privacy, factual claims, and actual deliverables.
+4. Prepare truthful English listings and real screenshots; review before publishing.
+5. Obtain approval for spending, binding commitments or other consequential actions.
